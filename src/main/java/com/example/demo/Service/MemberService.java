@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,8 @@ import com.example.demo.DTO.MemberDTO;
 import com.example.demo.domain.entity.Board;
 import com.example.demo.domain.entity.Member;
 import com.example.demo.domain.repository.MemberRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -35,6 +36,10 @@ public class MemberService {
 				.memid(member.getMemid())
 				.mempw(member.getMempw())
 				.name(member.getName())
+				.age(member.getAge())
+				.address(member.getAddress())
+				.e(member.getE())
+				.mail(member.getMail())
 				.build();
 		return memberDTO;
 		} else {
@@ -60,6 +65,12 @@ public class MemberService {
 		return members;
 		
 		}
+
+
+	public void updateage() {
+		memberRepository.updateage();
+		
+	}
 
 		
 		/*private MemberDTO convertEntityToDto(Member member) {

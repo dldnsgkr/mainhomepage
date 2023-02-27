@@ -1,9 +1,9 @@
 package com.example.demo.Controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +21,9 @@ import com.example.demo.DTO.MemberDTO;
 import com.example.demo.Service.BoardService;
 import com.example.demo.Service.CommentService;
 import com.example.demo.Service.MemberService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -55,6 +58,13 @@ public class BoardController {
 		session.setAttribute("name", name);
 		session.setAttribute("loginstate", true);
 		} 
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
+		String formatedNow = now.format(formatter);
+		if(formatedNow == "01/01")
+		{
+			memberService.updateage();
+		}
 		return "common/index.html";
 	}
 	

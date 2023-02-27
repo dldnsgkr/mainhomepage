@@ -3,7 +3,6 @@ package com.example.demo.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;import javax.print.attribute.standard.PageRanges;
-import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.domain.entity.Board;
 import com.example.demo.domain.repository.BoardRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
