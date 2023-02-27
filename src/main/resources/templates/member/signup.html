@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+ 	<form action="/signuping" method="post">
+ 		<table border="1" align="center">
+ 			<tr>
+ 				<th>아이디</th>
+ 				<td><input type="text" name="memid"></td>
+ 			</tr>
+ 			<tr>
+ 				<th>패스워드</th>
+ 				<td><input type="password" name="mempw"></td>
+ 			</tr>
+ 			<tr>
+ 				<th>이름</th>
+ 				<td><input type="text" name="name"></td>
+ 			</tr>
+ 			<tr>
+ 				<td><input type="submit" value="회원가입"></td>
+ 			</tr>
+ 		</table>
+    </form>
+</body>
+</html>

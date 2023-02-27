@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+	<style type="text/css">
+	#c {
+	text-align:center; 
+	}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script type="text/javascript">
+$(function() {
+	var name=$("#name").val();
+	var writer=$("#writer").val();
+	console.log(name,writer);
+	$("#de_up").hide();
+		if (name == writer) {
+			$("#de_up").show();
+		} else {
+			$("#de_up").hide();
+		}
+});
+
+$(function() {
+	var comwriter=$("#comwriter").val();
+	var name=$("#name").val();
+	$("#co_de_up").hide();
+	$("#co_de_up_be").hide();
+		if (comwriter == name) {
+			$("#co_de_up").show();
+			$("#co_de_up_be").show();
+		} else {
+			$("#co_de_up").hide();
+			$("#co_de_up_be").hide();
+		}
+});
+</script>
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+<div id="c">
+<h2 th:text="${boardDto.title}"></h2> 
+<table align="center">
+	<tr>
+		<th>작성자</th>
+		<td th:text="${boardDto.writer}"></td>
+	</tr>
+	<tr>
+		<th>내용</th>
+		<td th:text="${boardDto.content}"></td>
+	</tr>
+	<tr>
+		<td><input type="hidden" id="name" name="name" th:value="${name}"/></td>
+		<td><input type="hidden" id="writer" name="writer" th:value="${boardDto.writer}"/></td>
+	</tr>
+</table>
+	
+<!-- 수정 삭제 -->
+
+<div id="de_up">
+	<a th:href="@{'/post/edit/' + ${boardDto.id}}">
+		<button>수정</button>
+	</a>
+	
+	<form id="delete-form" th:action="@{'/post/' + ${boardDto.id}}" method="post">
+		<input type="hidden" name="_method" value="delete"/>
+		<button id="delete-btn">삭제</button>
+	</form>
+</div>
+<a th:href="@{'/post/comment/' + ${boardDto.id}}">
+		<button>댓글쓰러가기</button>
+	</a>
+</div>
+
+<table align="center">
+	<thead>
+		<tr>
+			<th class="one wide">번호</th>
+			<th class="ten wide">내용</th>
+			<th class="two wide">작성자</th>
+			<th><div id="co_de_up_be">비고</div></th>
+		</tr>	
+	</thead>
+	
+	<tbody>
+	<tr th:each="comment : ${commentDtoList}">
+		<td>
+			<span th:text="${comment.id}"></span>
+		</td>
+		<td>
+			<span th:text="${comment.content}"></span>
+		</td>
+		<td>
+            <span th:text="${comment.writer}"></span>
+        </td>
+        <td>
+         <div id="co_de_up">
+        <a th:href="@{'/post/comment/update/' + ${comment.id}}">
+			<button>수정</button>
+			</a>
+			<a th:href="@{'/post/comment/delete/' + ${comment.id}}">
+				<button>삭제</button>
+			</a>
+			</div>
+        </td>
+        <td>
+        	<input type="hidden" id="comwriter" name="comwriter" th:value="${comment.writer}"/>
+        </td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>
