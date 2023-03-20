@@ -1,9 +1,10 @@
-package com.example.demo.Service;
+package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,6 @@ import com.example.demo.domain.entity.Board;
 import com.example.demo.domain.entity.Comment;
 import com.example.demo.domain.repository.BoardRepository;
 import com.example.demo.domain.repository.CommentRepository;
-
-import jakarta.transaction.Transactional;
 
 
 @Service

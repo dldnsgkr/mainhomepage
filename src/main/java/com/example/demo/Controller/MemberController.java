@@ -1,19 +1,28 @@
 package com.example.demo.Controller;
 
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.MemberDTO;
-import com.example.demo.Service.MemberService;
+import com.example.demo.domain.entity.Member;
+import com.example.demo.domain.repository.MemberRepository;
+import com.example.demo.service.BoardService;
+import com.example.demo.service.MemberService;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+
+
 
 @Controller
 public class MemberController {
@@ -64,6 +73,7 @@ private MemberService memberService;
 		session.setAttribute("mempw", mempw);
 		session.setAttribute("memid", memid);
 		session.setAttribute("name", name);
+		session.setAttribute("loginstate", true);
 		if(autologin != null)
 		{
 			Cookie cookie1 = new Cookie("autoid", memid);
@@ -94,5 +104,8 @@ private MemberService memberService;
 		cookie2.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
 	    response.addCookie(cookie1);
 	    response.addCookie(cookie2);
+	    session.setAttribute("loginstate", false);
 		return "common/index.html";
-	}}
+	}
+
+}

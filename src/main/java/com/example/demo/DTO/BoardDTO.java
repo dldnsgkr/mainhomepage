@@ -22,6 +22,7 @@ public class BoardDTO {
 	private String content;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
+	private String whatpart;
 	
 	public Board toEntity() {
 		Board build = Board.builder()
@@ -29,18 +30,20 @@ public class BoardDTO {
 				.writer(writer)
 				.title(title)
 				.content(content)
+				.whatpart(whatpart)
 				.build();
 		return build;
 	}
 	
 	@Builder
-	public BoardDTO(Long id, String title, String content, String writer,LocalDateTime createdDate , LocalDateTime modifiedDate) {
+	public BoardDTO(Long id, String title, String content, String writer,LocalDateTime createdDate , LocalDateTime modifiedDate, String whatpart) {
 		this.id = id;
 		this.writer = writer;
 		this.title = title;
 		this.content = content;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
+		this.whatpart = whatpart;
 		
 	}
 }

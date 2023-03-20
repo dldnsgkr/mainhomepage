@@ -1,10 +1,10 @@
 package com.example.demo.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import com.example.demo.domain.entity.Board;
 
@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /*
 create table board (
@@ -41,13 +40,15 @@ public class Board extends TimeEntity{
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String content;
 	
+	@Column(length = 100, nullable = false)
+	private String whatpart;
 	
 	@Builder
-	public Board(Long id, String title, String content, String writer) {
+	public Board(Long id, String title, String content, String writer, String whatpart) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
-	
+		this.whatpart = whatpart;
 	}
 }

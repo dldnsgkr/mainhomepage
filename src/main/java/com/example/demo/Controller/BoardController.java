@@ -1,12 +1,12 @@
 package com.example.demo.Controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.DTO.MemberDTO;
-import com.example.demo.Service.BoardService;
-import com.example.demo.Service.CommentService;
-import com.example.demo.Service.MemberService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
+import com.example.demo.service.MemberService;
 
 
+import org.springframework.ui.Model;
 @Controller
 public class BoardController {
 
@@ -58,13 +57,6 @@ public class BoardController {
 		session.setAttribute("name", name);
 		session.setAttribute("loginstate", true);
 		} 
-		LocalDate now = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
-		String formatedNow = now.format(formatter);
-		if(formatedNow == "01/01")
-		{
-			memberService.updateage();
-		}
 		return "common/index.html";
 	}
 	
@@ -96,6 +88,15 @@ public class BoardController {
 		model.addAttribute("boardList",boardDtoList);
 		model.addAttribute("pageList",pageList);
 		return "board/list.html";
+	}
+	
+	@GetMapping("/share")
+	public String sharelist(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
+		List<BoardDTO> boardDtoList = boardservice.getShareList(pageNum);
+		Integer[] pageList = boardservice.getsharePageList(pageNum);
+		model.addAttribute("boardList",boardDtoList);
+		model.addAttribute("pageList",pageList);
+		return "board/sharelist.html";
 	}
 	
 	@GetMapping("/post/{no}")
@@ -181,11 +182,21 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board/search")
-	public String search(@RequestParam(value = "keyword") String keyword,  Model model) {
-		List<BoardDTO> boardDtoList = boardservice.searchPosts(keyword);
+	public String search(@RequestParam(value = "keyword") String keyword, 
+			@RequestParam(value = "whataboutsearch") String whataboutsearch, Model model) {
+		if(true) {}
 		
+		if(whataboutsearch.equals("제목")) {
+		List<BoardDTO> boardDtoList = boardservice.searchtitle(keyword);
 		model.addAttribute("boardList",boardDtoList);
+		} else if(whataboutsearch.equals("내용")) {
+			List<BoardDTO> boardDtoList = boardservice.searchcontent(keyword);
+			model.addAttribute("boardList",boardDtoList);
+		} else {
+			List<BoardDTO> boardDtoList = boardservice.searchPosts(keyword);
+			model.addAttribute("boardList",boardDtoList);
+		}
 		return "board/list.html";
 	}
-
+	
 }
