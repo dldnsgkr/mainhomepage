@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <style type="text/css">
+    #a{
+    text-align: center;
+    }
+    </style>
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+
+<table border="1" align="center">
+	<thead>
+		<tr>
+			<th class="one wide">번호</th>
+			<th class="ten wide">글제목</th>
+			<th class="two wide">작성자</th>
+		</tr>	
+	</thead>
+	
+	<tbody>
+	<tr th:each="board : ${boardList}">
+		<td>
+			<span th:text="${board.id}"></span>
+		</td>
+		<td>
+			<a th:href="@{'/post/' + ${board.id}}">
+				<span th:text="${board.title}"></span>
+			</a>
+		</td>
+		<td>
+            <span th:text="${board.writer}"></span>
+        </td>
+	</tr>
+	</tbody>
+</table>
+	<div id="a">
+	<span th:each="pageNum : ${pageList}" th:inline="text">
+		<a th:href="@{'/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
+	</span>
+	</div>
+</body>
+</html>
