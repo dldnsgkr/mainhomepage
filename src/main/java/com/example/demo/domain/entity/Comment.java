@@ -29,11 +29,20 @@ public class Comment extends TimeEntity{
 	@Column(length = 255, nullable = false)
 	private String boardid;
 	
+	@Column(length = 255, nullable = false)
+	private String whatpart;
+	
+	@Column(length = 255, nullable = false)
+	private String choose_b_c;
+	
 	@Builder
-	public Comment(Long id, String writer, String content,String boardid) {
+	public Comment(Long id, String writer, String content, 
+			String whatpart, String choose_b_c, String boardid) {
 		this.id = id;
 		this.writer = writer;
 		this.content = content;
 		this.boardid = boardid;
+		this.whatpart = whatpart;
+		this.choose_b_c = choose_b_c;
 	}
 }

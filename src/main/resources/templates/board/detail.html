@@ -68,7 +68,7 @@ $(function() {
 		<button id="delete-btn">삭제</button>
 	</form>
 </div>
-<a th:href="@{'/post/comment/' + ${boardDto.id}}">
+<a th:href="@{'/post/comment/' + ${boardDto.id} + '/' + ${boardDto.whatpart} + '/' + 'b'}">
 		<button>댓글쓰러가기</button>
 	</a>
 </div>

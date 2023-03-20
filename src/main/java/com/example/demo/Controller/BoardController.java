@@ -47,6 +47,8 @@ public class BoardController {
 		if(memberDto == null) {
 			String message = "아이디 비번 입력 오류";
 			model.addAttribute("message",message);
+			session.setAttribute("mempw", null);
+			session.setAttribute("memid", null);
 			session.setAttribute("loginstate", false);
 			return "member/loginfault.html";
 		}
@@ -111,9 +113,12 @@ public class BoardController {
 		return "board/detail.html";
 	}
 	
-	@GetMapping("/post/comment/{no}")
-	public String commentpage(@PathVariable("no") Long id,  Model model, HttpServletRequest request) {
+	@GetMapping("/post/comment/{no}/{whatpart}/{choosebc}")
+	public String commentpage(@PathVariable("no") Long id,@PathVariable("whatpart") String whatpart,@PathVariable("choosebc") String choosebc,
+			Model model, HttpServletRequest request) {
 		model.addAttribute("boardid", id);
+		model.addAttribute("whatpart", whatpart);
+		model.addAttribute("choose_b_c", choosebc);
 		HttpSession session = request.getSession();
 		if(session.getAttribute("memid") == null)
 		{

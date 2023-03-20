@@ -1,0 +1,141 @@
+@charset "utf-8";
+
+#head{
+    position: relative;
+    width: 100%;
+    min-width: 1050px;
+    z-index: 9999;
+    border-bottom: 1px solid #e6eef4;
+    background: #feffff;
+    box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.05);
+    --webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+    --moz-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.1);
+}
+
+#empty_top{
+    position: relative;
+    padding: 8px 0 0;
+    min-width: 1050px;
+    font-size: 1.3rem;
+}
+
+.side_list_place{
+    margin: 0 auto;
+    position: relative;
+    width: 1050px;
+    min-width: 1050px;
+    z-index: 2;
+}
+
+#empty_top .side_list_place::after{
+    display: block;
+    visibility: hidden;
+    clear: both;
+    opacity: 0;
+    content: '';
+}
+
+.side_list{
+    float: right;
+}
+
+a{
+    text-decoration-line: none;
+    color: black;
+}
+
+img{
+    width: 40px;
+    height: 40px;
+}
+
+.logo_search{
+    margin: 0 0 0 400px;
+}
+
+#lo_pi_box{
+    float: left;
+    margin-right: 15px;
+}
+
+#pi{
+    display: inline;
+}
+
+#lo{
+    display: inline;
+}
+
+form{
+    display: inline;
+}
+
+#search_bar{
+    display:inline-block;
+}
+
+input {
+   
+    padding: 0 15px;
+    height: 40px;   
+    border: none;
+    background-color: #EFEFEF;
+    width: 300px;
+  }
+  button {
+    border: none;
+    height: 40px;   
+    float: right;
+    cursor:pointer;
+  }
+
+#share_list{
+    position: relative;
+    float: left;
+    text-align: center;
+}
+
+#qna_list{
+    position: relative;
+    float: left;
+    text-align: center;
+}
+
+#gallrely_list{
+    position: relative;
+    float: left;
+    text-align: center;
+}
+
+#for_you_song{
+    position: relative;
+    float: left;
+    text-align: center;
+}
+
+.main_list{
+    display: inline-block;
+    margin: 0 30px 0 0 ;
+    line-height: 38px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: -0.1em;
+}
+
+#main_list_place{
+    z-index: 9999;
+}
+
+#main_list_place .side_list_place{
+    z-index: 9999;
+    position: relative;
+    margin: 0 auto;
+    width: 1050px;
+}
+
+#main_list_place .side_list_place::after{
+    display: block;
+    visibility: hidden;
+    clear: both;
+    content: "";
+}

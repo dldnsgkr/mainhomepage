@@ -23,6 +23,7 @@ public class BoardDTO {
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private String whatpart;
+	private int readcnt;
 	
 	public Board toEntity() {
 		Board build = Board.builder()
@@ -31,12 +32,13 @@ public class BoardDTO {
 				.title(title)
 				.content(content)
 				.whatpart(whatpart)
+				.readcnt(readcnt)
 				.build();
 		return build;
 	}
 	
 	@Builder
-	public BoardDTO(Long id, String title, String content, String writer,LocalDateTime createdDate , LocalDateTime modifiedDate, String whatpart) {
+	public BoardDTO(Long id, String title, String content, String writer,LocalDateTime createdDate , LocalDateTime modifiedDate, String whatpart, int readcnt) {
 		this.id = id;
 		this.writer = writer;
 		this.title = title;
@@ -44,6 +46,7 @@ public class BoardDTO {
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
 		this.whatpart = whatpart;
+		this.readcnt = readcnt;
 		
 	}
 }

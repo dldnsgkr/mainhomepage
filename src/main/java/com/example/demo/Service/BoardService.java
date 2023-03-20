@@ -51,6 +51,7 @@ public class BoardService {
 					.writer(board.getWriter())
 					.createdDate(board.getCreatedDate())
 					.whatpart(board.getWhatpart())
+					.readcnt(board.getReadcnt())
 					.build();
 			boardDtoList.add(boarddto);
 		}
@@ -76,6 +77,7 @@ public class BoardService {
 					.writer(board.getWriter())
 					.createdDate(board.getCreatedDate())
 					.whatpart(board.getWhatpart())
+					.readcnt(board.getReadcnt())
 					.build();
 			boardDtoList.add(boarddto);
 		}

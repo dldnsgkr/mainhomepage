@@ -43,12 +43,16 @@ public class Board extends TimeEntity{
 	@Column(length = 100, nullable = false)
 	private String whatpart;
 	
+	@Column(length = 10)
+	private int readcnt;
+	
 	@Builder
-	public Board(Long id, String title, String content, String writer, String whatpart) {
+	public Board(Long id, String title, String content, String writer, String whatpart, int readcnt) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.whatpart = whatpart;
+		this.readcnt = readcnt;
 	}
 }

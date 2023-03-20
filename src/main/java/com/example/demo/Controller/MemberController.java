@@ -7,12 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.MemberDTO;
@@ -58,35 +61,40 @@ private MemberService memberService;
 	}
 	
 	@PostMapping("/logining")
-	public String logining(MemberDTO memberDTO,Model model,HttpServletResponse response ,HttpServletRequest request, @RequestParam(value = "autologin" , required = false)String autologin) {
+	@ResponseBody
+	public boolean logining(MemberDTO memberDTO,Model model,HttpServletResponse response ,HttpServletRequest request, @RequestParam(value = "autologin" , required = false)String autologin) {
 		String memid = memberDTO.getMemid();
 		String mempw = memberDTO.getMempw();
+		System.out.println(memid);
+		System.out.println(mempw);
 		MemberDTO memberDto = memberService.login(memid,mempw);
-		if(memberDto == null) {
-			String message = "아이디 비번 입력 오류";
-			model.addAttribute("message",message);
-			return "member/loginfault.html";
-		}
-		String name = memberDto.getName();
-		System.out.println(name);
-		HttpSession session = request.getSession();
-		session.setAttribute("mempw", mempw);
-		session.setAttribute("memid", memid);
-		session.setAttribute("name", name);
-		session.setAttribute("loginstate", true);
-		if(autologin != null)
-		{
-			Cookie cookie1 = new Cookie("autoid", memid);
-			Cookie cookie2 = new Cookie("autopw", mempw);
-			cookie1.setPath("/");
-			cookie1.setMaxAge(60*60*24*7);
-			cookie2.setPath("/");
-			cookie2.setMaxAge(60*60*24*7);
-			response.addCookie(cookie1);
-			response.addCookie(cookie2);
-		}
+	    if (memberDto != null) {
+	    	// 로그인 성공
+	    	String name = memberDto.getName();
+
+			HttpSession session = request.getSession();
+			session.setAttribute("mempw", mempw);
+			session.setAttribute("memid", memid);
+			session.setAttribute("name", name);
+			session.setAttribute("loginstate", true);
+			if(autologin != null)
+			{
+				Cookie cookie1 = new Cookie("autoid", memid);
+				Cookie cookie2 = new Cookie("autopw", mempw);
+				cookie1.setPath("/");
+				cookie1.setMaxAge(60*60*24*7);
+				cookie2.setPath("/");
+				cookie2.setMaxAge(60*60*24*7);
+				response.addCookie(cookie1);
+				response.addCookie(cookie2);
+			}
+	      return true;
+	    } else {
+	    	// 로그인 실패
+		      return false;
+	    }
+			//return "member/loginfault.html";
 		
-		return "common/NewFile.html";
 	}
 	
 	@GetMapping("/logout")

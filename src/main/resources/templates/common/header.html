@@ -1,12 +1,97 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-<header>
-<nav class="navbar navbar-inverse">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+<body>
+    <div id="empty_top">
+        <div class="side_list_place">
+            <div class="side_list">
+                <a th:href="@{/alert}"><strong>신고</strong></a>
+                <a th:href="@{/caption}">공지사항</a>
+                <a th:href="@{/bestContent}">인기글</a>
+                <a th:href="@{studyTeam}">S.T</a>
+                <a th:href="@{/list}">모든 게시글</a>
+                <a th:href="@{/post}" id="writebutton">글쓰기</a>
+            </div>
+        </div>
+    </div>
+    <div id="head">
+    <div class="logo_search">
+        <div id="lo_pi_box">
+            <div id="pi">
+                <img th:src="@{/image/search_logo.png}">
+            </div>
+            <div id="lo">
+                <img th:src="@{/image/picture.png}">
+            </div>
+        </div>
+        <div id="search_bar">
+            <form action="/">
+                <input type="text" name="everything">
+                <button><img th:src="@{/image/search.png}" style="width: 25px; height: 25px;"></button>
+            </form>
+        </div>
+    </div>
+    <div id="main_list_place">
+        <div class="side_list_place">
+        <!--<div id="all_see">
+            <button>전체보기</button>
+            <div class="list_a">
+                <a href="">최신글</a>마우스 올릴때마다 밑줄 해야함
+                <a href="">최신글</a>
+                <a href="">최신글</a>
+                <a href="">FAQ</a>
+            </div>
+            <ul class="list_b">
+                <li></li>
+            </ul>
+            <ul class="list_c">
+                <li></li>
+            </ul>
+            <ul class="list_d">
+                <li></li>
+            </ul>
+            <ul class="list_e">
+                <li></li>
+            </ul>
+            <ul class="list_f">
+                <li></li>
+            </ul>
+            <ul class="list_g">
+                <li></li>
+            </ul>
+            <ul class="list_h">
+                <li></li>
+            </ul>
+            </div> -->
+            <div id="share_list">
+                <a th:href="@{/share}" class="main_list">공유글</a>
+            </div>
+            <div id="qna_list">
+                <a th:href="@{/gna}" class="main_list">Q&A</a>
+            </div>
+            <div id="gallrely_list">
+                <a th:href="@{/gallrely}" class="main_list">짤방</a>
+            </div> 
+            <div id="for_you_song">
+                <a th:href="@{forYouSong}" class="main_list">추천 노래</a>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
+<!-- <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">safekorea</a>
@@ -19,7 +104,7 @@
           <li><a href="/list">게시물 보기</a></li>
         </ul>
       </li>
-      <!--  <li><a href="#">Page 2</a></li>-->
+      
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li th:if="${session.memid == null}"><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -27,6 +112,7 @@
       <li th:if="${session.memid != null}"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
     </ul>
   </div>
-</nav>
-</header>
+</nav>  -->
+
+</body>
 </html>

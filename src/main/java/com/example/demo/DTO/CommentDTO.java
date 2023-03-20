@@ -23,6 +23,8 @@ public class CommentDTO {
 	private String boardid;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
+	private String whatpart;
+	private String choose_b_c;
 	
 	public Comment toEntity() {
 		Comment build = Comment.builder()
@@ -30,17 +32,22 @@ public class CommentDTO {
 				.writer(writer)
 				.content(content)
 				.boardid(boardid)
+				.whatpart(whatpart)
+				.choose_b_c(choose_b_c)
 				.build();
 		return build;
 	}
 	
 	@Builder
-	public CommentDTO(Long id, String content, String writer, String boardid, LocalDateTime createdDate , LocalDateTime modifiedDate) {
+	public CommentDTO(Long id, String content, String writer, String boardid, LocalDateTime createdDate , 
+			LocalDateTime modifiedDate, String whatpart, String choose_b_c) {
 		this.id = id;
 		this.writer = writer;
 		this.content = content;
 		this.boardid = boardid;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
+		this.whatpart = whatpart;
+		this.choose_b_c = choose_b_c;
 }
 }
