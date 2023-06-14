@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/list.css}">
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+	<div id="wrapper" class="wrapper-pad">
+		<div id="bo_qa" class="container">
+		<div id="wrapper_title">share</div>
+		<div id="top_btn">
+			<div id="dark_btn">
+            	<button type="button" id="totop_btn">
+                	<span class="sound_only">상단으로</span>
+                	상단
+                        <!-- <img src="image/search_logo.png" alt="상단으로"> -->
+                </button>
+            </div>
+		</div>
+		<script>
+                $(window).scroll(function(){
+
+                    if( $(this).scrollTop() > 100 ){
+                    $("#totop_btn").show();
+                    $("#totop_btn").addClass("on");
+                    }
+                    else{
+                    $("#totop_btn").removeClass("on");
+                    setTimeout(function() {
+                        if ($(window).scrollTop() == 0) {
+                        	$("#totop_btn").hide();
+                        }
+                      }, 2000); // 1초 후에 실행
+                    }
+                 
+                });
+                    
+                $("#totop_btn").click(function(){
+                window.scrollTo({top : 0, behavior: 'smooth'}); 
+                });
+        </script>
+		<div id="con_lf">
+			<h3 style="font-weight: bold !important;">내용 검색</h3>
+			<div class="sharelistdiv">
+				<div class="board_info">
+					<div class="search_default searchdiv">
+						<form action="/board/search">
+							<fieldset>
+								<legend>검색</legend>
+								<select name="whataboutsearch">
+									<option value="제목">제목</option>
+									<option value="내용">내용</option>
+									<option value="제목/내용">제목/내용</option>
+								</select>
+								<div class="input_wrap">
+									<input type="search" name="keyword" placeholder="검색어를 입력하세요." class="input_type01">
+									<input type="submit" class="search_button" value="검색">
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+				<div class="sharelistwrap">
+					<div class="totalTxt">
+						총 <span></span>건
+					</div>
+				</div>
+			</div>
+			<table>
+				<colgroup>
+					<col style="width: 40px;">
+					<col style="width: 50px;">
+					<col style="width: auto">
+					<col style="width: 15px;">
+					<col style="width: 50px;">
+				</colgroup>
+				<thead>
+					<tr th:if="${torf == 'false'}">
+						<th scope="col" style="text-align: center;">번호</th>
+						<th scope="col" style="text-align: center;">작성자</th>
+						<th scope="col" class="list" style="text-align: center;">글제목</th>
+						<th scope="col" style="text-align: center;">작성일</th>
+						<th scope="col" style="text-align: center;">조회수</th>
+					</tr>	
+					<tr>
+						<th colspan="5" th:if="${torf == 'true'}" style="text-align: center;">검색 결과가 존재하지 않습니다.</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+				<tr th:each="board : ${boardList}">
+					<td>
+						<span th:text="${board.id}"></span>
+					</td>
+					<td>
+						<span th:text="${board.writer}"></span>
+					</td>
+					<td class="list">
+						<a th:href="@{'/post/' + ${board.id} + '/' + ${board.title}}">
+							<span th:text="${board.title}"></span>
+						</a>
+					</td>
+					<td>
+			            <span th:text="${board.createdDate}"></span>
+			        </td>
+			        <td>
+			            <span th:text="${board.readcnt}"></span>
+			        </td>
+			        <!--<td>
+			            <span th:text="${}"2</span>
+			        </td>-->
+				</tr>
+				</tbody>
+			</table>
+			<div id="a">
+			<span th:each="pageNum : ${pageList}" th:inline="text">
+				<a th:href="@{'/share?page=' + ${pageNum}}">[[${pageNum}]]</a>
+			</span>
+			</div>
+		</div>
+		 <div id="main_ri">
+		 <div th:if="${session.memid == null}">
+                <div id="tnb">
+                    <h3>회원로그인</h3>
+                    <section id="ol_before" class="tnb-login">
+                        <h2>로그인</h2>
+                        <form name="f">
+                            <fieldset>
+                                <label for="ol_id" id="ol_idlabel" class="ol_idlabel">
+                                    <Strong class="sound_only">회원아이디 필수</Strong>
+                                </label>
+                                <input type="text" id="ol_id" name="memid" required class="required" maxlength="20" placeholder="아이디">
+                                <label for="ol_pw" id="ol_pwlabel" class="ol_pwlabel">
+                                    <Strong class="sound_only">비밀번호 필수</Strong>
+                                </label>
+                                <input type="text" id="ol_pw" name="mempw" required class="required" maxlength="20" placeholder="패스워드">
+                                <input type="submit" id="ol_submit" value="로그인">
+                                <div id="ol_auto">
+                                    <input type="checkbox" name="autologin" id="login_auto_login" value="1">
+                                    <label for="login_auto_login" class="login_auto">자동로그인</label>
+                                </div>
+                                <div id="ol_svc">
+                                    <a th:href="@{/signup}">
+                                        <b>회원가입</b>
+                                    </a>
+                                    <!--<a href="" id="ol_password_lost">
+                                        정보찾기
+                                    </a>-->
+                                </div>
+                            </fieldset>
+                        </form>
+                        <div class="sns-wrap">
+                            <!--<a href="" class="sns-icon sns-naver" title="네이버아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/naver_color.svg" alt="네이버 로그인">
+                                </span>
+                                <span class="txt">
+                                    네이버
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div1"></span>
+                            <a href="" class="sns-icon sns-kakao" title="카카오아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/kakao_color.svg" alt="카카오 로그인">
+                                </span>
+                                <span class="txt">
+                                    카카오
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div2"></span>
+                            <a href="" class="sns-icon sns-fb" title="페이스북아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/facebook_color.svg" alt="페이스북 로그인">
+                                </span>
+                                <span class="txt">
+                                    페이스북
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div3"></span>
+                            <a href="" class="sns-icon sns-gg" title="구글아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/google_color.svg" alt="구글 로그인">
+                                </span>
+                                <span class="txt">
+                                    구글
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div4"></span>-->
+                        </div>
+                    </section>
+                    </div>
+				</div>
+				<script>                 
+                        $omi = $('#ol_id');
+                        $omp = $('#ol_pw');
+                        // $omp.css('display','inline-block').css('width',104);
+                        $omi_label = $('#ol_idlabel');
+                        $omi_label.addClass('ol_idlabel');
+                        $omp_label = $('#ol_pwlabel');
+                        $omp_label.addClass('ol_pwlabel');
+
+                        $(function() {
+                            $omi.focus(function() {
+                                $omi_label.css('visibility','hidden');
+                            });
+                            $omp.focus(function() {
+                                $omp_label.css('visibility','hidden');
+                            });
+                            $omi.blur(function() {
+                                $this = $(this);
+                                if($this.attr('id') == "ol_id" && $this.attr('value') == "") $omi_label.css('visibility','visible');
+                            });
+                            $omp.blur(function() {
+                                $this = $(this);
+                                if($this.attr('id') == "ol_pw" && $this.attr('value') == "") $omp_label.css('visibility','visible');
+                            });
+                            
+                            $("#login_auto_login").click(function(){
+                                if ($(this).is(":checked")) {
+                                    if(!confirm("자동로그인을 사용하시면 다음부터 회원아이디와 비밀번호를 입력하실 필요가 없습니다.\n\n공공장소에서는 개인정보가 유출될 수 있으니 사용을 자제하여 주십시오.\n\n자동로그인을 사용하시겠습니까? \n\n해당 로그인은 7일간 유지됩니다."))
+                                        return false;
+                                }
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                    $('#ol_submit').off('click').on('click', function() { 
+                    	  console.log("asdf"); 
+                    	  let param = {
+                    	    id: $("#ol_id").val(),
+                    	    pass: $("#ol_pw").val(),
+                    	    autologin: $("#login_auto_login").val()
+                    	  };
+                    	  let refererUrl = document.referrer; 
+                    	  $.ajax({ 
+                    	    url: "/logining", 
+                    	    type: "POST", 
+                    	    data: { 
+                    	      "memid": param.id, 
+                    	      "mempw": param.pass, 
+                    	      "autologin": param.autologin,
+                    	      "refererUrl": refererUrl 
+                    	    }, 
+                    	    dataType: "json", 
+                    	    async: false, 
+                    	    cache: false, 
+                    	    success: function(data,textStatus) { 
+                    	      if (data == true) {
+                    	        alert("환영합니다 "+param.id+" 님"); 
+                    	      } else { 
+                    	        alert("아이디나 비밀번호가 틀렸습니다.\n다시 입력해주세요."); 
+                    	      } 
+                    	    } 
+                    	  }); 
+                    	});
+                            </script>
+		 <div th:if="${session.memid != null}">
+		 <!-- 로그아웃 -->
+                    <div id="tnb">
+                    <h3>회원로그인</h3>
+                    <section id="ol_before" class="tnb-login">
+                        <h2>로그인</h2>
+                        <form th:action="@{/logout}">
+                            <fieldset>
+                                <label for="ol_id" id="ol_idlabel" class="ol_idlabel">
+                                    
+                                </label>
+                                <input type="text" id="ol_id" name="memid" required class="required" maxlength="20" readonly="readonly" th:value="${session.memid}">
+                                <label for="ol_pw" id="ol_pwlabel" class="ol_pwlabel">
+                                    
+                                </label>
+                                <input type="text" id="ol_pw" name="mempw" required class="required" maxlength="20" readonly="readonly" th:value="${session.mempw}">
+                                <input type="text" id="ol_pw" name="mempw" required class="required" maxlength="20" readonly="readonly" th:value="${session.name}">
+                                <input type="submit" id="logout_link" value="로그아웃">
+                                
+                                <div id="ol_svc">
+                                    <!--<a th:href="@{/logout}" id="logout_link">
+                                        <b>로그아웃</b>
+                                    </a>
+                                    <a href="" id="ol_password_lost">
+                                        정보찾기
+                                    </a>-->
+                                </div>
+                            </fieldset>
+                        </form>
+                        <div class="sns-wrap">
+                            <!-- <a href="" class="sns-icon sns-naver" title="네이버아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/naver_color.svg" alt="네이버 로그인">
+                                </span>
+                                <span class="txt">
+                                    네이버
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div1"></span>
+                            <a href="" class="sns-icon sns-kakao" title="카카오아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/kakao_color.svg" alt="카카오 로그인">
+                                </span>
+                                <span class="txt">
+                                    카카오
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div2"></span>
+                            <a href="" class="sns-icon sns-fb" title="페이스북아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/facebook_color.svg" alt="페이스북 로그인">
+                                </span>
+                                <span class="txt">
+                                    페이스북
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div3"></span>
+                            <a href="" class="sns-icon sns-gg" title="구글아이디로 로그인">
+                                <span class="ico">
+                                    <img src="//sir.kr/plugin/social_login/img/google_color.svg" alt="구글 로그인">
+                                </span>
+                                <span class="txt">
+                                    구글
+                                    <i> 로그인</i>
+                                </span>
+                            </a>
+                            <span class="sns-div sns-div4"></span>-->
+                        </div>
+                    </section>
+		 		</div>
+		 		<script type="text/javascript">
+		 		$('#logout_link').click(function()
+                        { 
+                           alert("로그아웃 되었습니다.");
+                        })
+		 		</script>
+            	</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	document.addEventListener('DOMContentLoaded', function(){
+        //다크모드 토글
+        if(document.querySelector('.darkmode')){
+            if(localStorage.getItem("darkmode") == 'on'){
+                //다크모드 켜기
+                document.body.dataset.darkmode='on';
+                document.querySelector('#toggle-radio-dark').checked = true;
+            }
+            //다크모드 이벤트 핸들러
+            document.querySelector('.darkmode').addEventListener("click", e=>{
+                if(e.target.classList.contains('todark')){
+                    document.body.dataset.darkmode='on';
+                    localStorage.setItem("darkmode", "on");
+                }else if(e.target.classList.contains('tolight')){
+                    document.body.dataset.darkmode='off';
+                    localStorage.setItem("darkmode", "off");
+                }
+            },false);
+        }else{
+            localStorage.removeItem("darkmode");
+        }
+
+    })
+    </script>
+	<div th:insert="common/footer.html" id="footer"></div>
+</body>
+</html>
