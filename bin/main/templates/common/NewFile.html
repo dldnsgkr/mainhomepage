@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<style type="text/css">
+#centerbox{
+text-align: center;
+}
+</style>
+    <!--  <link rel="stylesheet" th:href="@{/css/board.css}">-->
+</head>
+<body>
+<div th:insert="common/header.html" id="header"></div>
+<center><h1>로그인 성공</h1></center>
+<div id="centerbox">
+<a th:href="@{/post}">글쓰기</a>
+ 	<form action="/board/search" method="GET">
+        <div class="search">
+            <input name="keyword" type="text" placeholder="검색어를 입력해주세요">
+       	</div>
+       	<button>검색하기</button>
+    </form>
+   </div>
+   <!-- <div th:insert="common/footer.html" id="footer"></div>-->
+</body>
+</html>

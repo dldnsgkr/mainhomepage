@@ -35,6 +35,9 @@ public class CommentService {
 				.writer(comment.getWriter())
 				.boardid(comment.getBoardid())
 				.createdDate(comment.getCreatedDate())
+				.whatpart(comment.getWhatpart())
+				.commentid(comment.getCommentid())
+				.choose_b_c(comment.getChoose_b_c())
 				.build();
 		commentDtoList.add(commentDto);
 		}

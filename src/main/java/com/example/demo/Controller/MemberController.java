@@ -1,28 +1,33 @@
 package com.example.demo.Controller;
 
-import java.util.List;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.UUID;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.MemberDTO;
-import com.example.demo.domain.entity.Member;
-import com.example.demo.domain.repository.MemberRepository;
-import com.example.demo.service.BoardService;
+import com.example.demo.DTO.NaverLoginDTO;
 import com.example.demo.service.MemberService;
+import com.example.demo.service.NaverService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -31,9 +36,11 @@ import com.example.demo.service.MemberService;
 public class MemberController {
 	
 private MemberService memberService;
+private NaverService naverService;
 	
-	public MemberController(MemberService memberService) {
+	public MemberController(MemberService memberService, NaverService naverService) {
 		this.memberService = memberService;
+		this.naverService = naverService;
 	}
 	
 	@GetMapping("/signup")
@@ -77,6 +84,7 @@ private MemberService memberService;
 			session.setAttribute("memid", memid);
 			session.setAttribute("name", name);
 			session.setAttribute("loginstate", true);
+			System.out.println(autologin+12);
 			if(autologin != null)
 			{
 				Cookie cookie1 = new Cookie("autoid", memid);
@@ -114,6 +122,69 @@ private MemberService memberService;
 	    response.addCookie(cookie2);
 	    session.setAttribute("loginstate", false);
 		return "common/index.html";
+	}
+	
+	@GetMapping("/naverLogin")
+	public String naverlogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		return "common/loading.html";
+	}
+
+	@GetMapping("/naverinfo")
+	public ResponseEntity<?> naverinfo(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String accessToken = "";
+		
+		Cookie[] cookiena = request.getCookies();
+        if (cookiena != null) {
+            for (Cookie cookie : cookiena) {
+            	if (cookie.getName().equals("accessToken")) {
+                	accessToken = cookie.getValue();
+                }
+            }
+        }
+        System.out.println(accessToken);
+		//acessToken디코딩
+		String DaccessToken = URLDecoder.decode(accessToken, "UTF-8");
+		System.out.println(DaccessToken);
+		NaverLoginDTO naverLoginDTO = naverService.naverprofile(DaccessToken);
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("memid", "naver");
+		session.setAttribute("name", naverLoginDTO.getNickname());
+		UUID uuid = UUID.randomUUID();
+        String randomUUID = uuid.toString();
+		session.setAttribute("mempw", randomUUID);
+		session.setAttribute("loginstate", true);
+		System.out.println(naverLoginDTO.getNickname());
+		
+		String url = "";
+        // 쿠키 읽기
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("url")) {
+                    url = cookie.getValue();
+                } 
+            }
+        }
+        
+        //url 디코딩
+		String decodedUrl = URLDecoder.decode(url, "UTF-8");
+		//url path만 추출
+		URL url2 = new URL(decodedUrl);
+		String path = url2.getPath();
+		
+		// 객체 생성 및 데이터 설정
+	    NaverLoginDTO yourObject = new NaverLoginDTO();
+	    yourObject.setPath(path);
+	    
+	    // JSON 변환
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    String json = objectMapper.writeValueAsString(yourObject);
+	    
+	    // JSON 응답 반환
+	    return ResponseEntity.ok(json);
+		
 	}
 
 }

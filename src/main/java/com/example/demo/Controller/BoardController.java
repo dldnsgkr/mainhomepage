@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,11 @@ public class BoardController {
 		return "common/index.html";
 	}
 	
+	@GetMapping("/main")
+	public String main() {
+		return "common/index.html";
+	}
+	
 	@GetMapping("/post")
 	public String write(HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession();
@@ -96,28 +102,40 @@ public class BoardController {
 	public String sharelist(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum) {
 		List<BoardDTO> boardDtoList = boardservice.getShareList(pageNum);
 		Integer[] pageList = boardservice.getsharePageList(pageNum);
+		Long contentcount = boardservice.getShareBoardCount();
+		Integer lastpage = boardservice.gettotalLastPageNum();
+		Integer curPageNum = boardservice.getCurPageNum(pageNum);
 		model.addAttribute("boardList",boardDtoList);
 		model.addAttribute("pageList",pageList);
+		model.addAttribute("number",curPageNum);
+		model.addAttribute("contentcount",contentcount);
+		model.addAttribute("lastpage",lastpage);
 		return "board/sharelist.html";
 	}
 	
 	@GetMapping("/post/{no}")
-	public String detail(@PathVariable("no") Long id,  Model model,HttpServletRequest request) {
+	public String detail(@PathVariable("no") Long id, String recieve_read, Model model,HttpServletRequest request, HttpServletResponse response) {
 		BoardDTO boardDto = boardservice.getPost(id);
 		List<CommentDTO> commentDtoList = commentService.getCommentlist(id);
+			boardservice.readcnt(id, request, response);
+	   	
 		model.addAttribute("boardDto",boardDto);
 		model.addAttribute("commentDtoList",commentDtoList);
 		HttpSession session = request.getSession();
 		String name = (String)session.getAttribute("name");
 		model.addAttribute("name",name);
+		System.out.println(name);
+		System.out.println(recieve_read);
 		return "board/detail.html";
 	}
 	
-	@GetMapping("/post/comment/{no}/{whatpart}/{choosebc}")
-	public String commentpage(@PathVariable("no") Long id,@PathVariable("whatpart") String whatpart,@PathVariable("choosebc") String choosebc,
+	@GetMapping("/post/comment/{no}/{whatpart}/{choosebc}/{commentid}")
+	public String commentpage(@PathVariable("no") Long id,@PathVariable("whatpart") String whatpart,@PathVariable("choosebc") String choosebc,@ PathVariable("commentid") Long commentid, 
 			Model model, HttpServletRequest request) {
+		model.addAttribute("commentid", commentid);
 		model.addAttribute("boardid", id);
 		model.addAttribute("whatpart", whatpart);
+		System.out.println(whatpart);
 		model.addAttribute("choose_b_c", choosebc);
 		HttpSession session = request.getSession();
 		if(session.getAttribute("memid") == null)
@@ -130,7 +148,12 @@ public class BoardController {
 	}
 	
 	@PostMapping("/post/comment")
-	public String comment(CommentDTO commentDTO) {
+	public String comment(CommentDTO commentDTO,HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		if(session.getAttribute("memid") == null)
+		{
+			return "member/mustlogin.html";
+		}
 		commentService.save(commentDTO);
 		return "redirect:/";
 	}
@@ -180,7 +203,13 @@ public class BoardController {
 		return "redirect:/";
 	}
 	
-	@DeleteMapping("/post/{no}")
+//	@DeleteMapping("/post/{no}")
+//	public String delete(@PathVariable("no") Long id) {
+//		boardservice.deletePost(id);
+//		return "redirect:/";
+//	}
+	
+	@GetMapping("/post/delete/{no}")
 	public String delete(@PathVariable("no") Long id) {
 		boardservice.deletePost(id);
 		return "redirect:/";
@@ -190,18 +219,37 @@ public class BoardController {
 	public String search(@RequestParam(value = "keyword") String keyword, 
 			@RequestParam(value = "whataboutsearch") String whataboutsearch, Model model) {
 		if(true) {}
-		
+		System.out.println(whataboutsearch);
 		if(whataboutsearch.equals("제목")) {
 		List<BoardDTO> boardDtoList = boardservice.searchtitle(keyword);
 		model.addAttribute("boardList",boardDtoList);
+		if(boardDtoList.isEmpty()) {
+			model.addAttribute("torf","true");
+		} else {
+			model.addAttribute("torf","false");
+		}
+		return "board/titlelist.html";
 		} else if(whataboutsearch.equals("내용")) {
 			List<BoardDTO> boardDtoList = boardservice.searchcontent(keyword);
 			model.addAttribute("boardList",boardDtoList);
+			System.out.println(boardDtoList.isEmpty());
+			if(boardDtoList.isEmpty()) {
+				model.addAttribute("torf","true");
+			} else {
+				model.addAttribute("torf","false");
+			}
+			return "board/contentlist.html";
 		} else {
 			List<BoardDTO> boardDtoList = boardservice.searchPosts(keyword);
 			model.addAttribute("boardList",boardDtoList);
+			if(boardDtoList.isEmpty()) {
+				model.addAttribute("torf","true");
+			} else {
+				model.addAttribute("torf","false");
+			}
+			return "board/contilist.html";
 		}
-		return "board/list.html";
+		
 	}
 	
 }
